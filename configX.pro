@@ -18,7 +18,8 @@ SOURCES += \
     src/configeditor/configeditor.cpp \
     src/servertree/serveritemdialog.cpp \
     src/configeditor/modules/nginxwidget.cpp \
-    src/configeditor/modules/basewidget.cpp
+    src/configeditor/modules/basewidget.cpp \
+    src/configeditor/sshsession.cpp
 
 HEADERS += \
     src/mainwindow.hpp \
@@ -27,7 +28,8 @@ HEADERS += \
     src/configeditor/configeditor.h \
     src/servertree/serveritemdialog.h \
     src/configeditor/modules/nginxwidget.h \
-    src/configeditor/modules/basewidget.h
+    src/configeditor/modules/basewidget.h \
+    src/configeditor/sshsession.h
 
 FORMS += \
     src/mainwindow.ui \

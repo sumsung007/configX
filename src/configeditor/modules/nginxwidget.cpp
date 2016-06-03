@@ -3,8 +3,8 @@
 
 #include <QtCore/QDebug>
 
-NginxWidget::NginxWidget(QWidget *parent):
-    BaseWidget(parent),
+NginxWidget::NginxWidget(ConfigEditor *editor, QWidget *parent):
+    BaseWidget(editor, parent),
     _ui(new Ui::NginxWidget)
 {
     qDebug() << "Create NginxWidget instance";

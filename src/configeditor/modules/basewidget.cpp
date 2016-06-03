@@ -1,6 +1,8 @@
 #include "basewidget.h"
 
-BaseWidget::BaseWidget(QWidget *parent): QWidget(parent)
+BaseWidget::BaseWidget(ConfigEditor *editor, QWidget *parent):
+    QWidget(parent),
+    editor(editor)
 {
 
 }

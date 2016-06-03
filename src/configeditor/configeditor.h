@@ -2,7 +2,7 @@
 #define CONFIGEDITOR_H
 
 #include "../servertree/servertreeitem.hpp"
-#include "modules/basewidget.h"
+#include "sshsession.h"
 
 #include <QtWidgets/QWidget>
 
@@ -20,10 +20,15 @@ public:
 
     ServerTreeItem *item() const;
 
+    bool isSshConnected();
+
+protected:
+    bool connectSsh();
+
 private:
     Ui::ConfigEditor *_ui;
     ServerTreeItem *_item;
-    BaseWidget *_currentModule;
+    SshSession *_sshSession;
 };
 
 #endif // CONFIGEDITOR_H

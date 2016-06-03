@@ -8,14 +8,15 @@
 ConfigEditor::ConfigEditor(ServerTreeItem *item, QWidget *parent):
     QWidget(parent),
     _ui(new Ui::ConfigEditor),
-    _item(item),
-    _currentModule(Q_NULLPTR)
+    _item(item)
 {
     qDebug() << "Create ConfigEditor instance";
 
+    this->_sshSession = new SshSession(item->host(), item->port(), item->username(), item->keyPath(), item->keyPassphrase());
+
     this->_ui->setupUi(this);
 
-    this->_ui->moduleWidget->addWidget(new NginxWidget);
+    this->_ui->moduleWidget->addWidget(new NginxWidget(this, this));
 
     connect(this->_ui->nginxButton, &QToolButton::clicked, [this]() {
         this->_ui->nginxButton->setChecked(true);
@@ -34,6 +35,7 @@ ConfigEditor::ConfigEditor(ServerTreeItem *item, QWidget *parent):
 
 ConfigEditor::~ConfigEditor()
 {
+    delete this->_sshSession;
     delete this->_ui;
 
     qDebug() << "Destroy ConfigEditor instance";

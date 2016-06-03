@@ -12,7 +12,7 @@ class NginxWidget: public BaseWidget
     Q_OBJECT
 
 public:
-    explicit NginxWidget(QWidget *parent = 0);
+    explicit NginxWidget(ConfigEditor *editor, QWidget *parent = 0);
     ~NginxWidget();
 
 private:
