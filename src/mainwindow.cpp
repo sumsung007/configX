@@ -20,6 +20,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->_ui->setupUi(this);
 
+    // Set splitter size
+    QList<int> splitterSizes;
+    splitterSizes << this->width() / 4 * 1 << this->width() / 4 * 3;
+    this->_ui->splitter->setSizes(splitterSizes);
+    this->_ui->splitter->setStretchFactor(0, 1);
+    this->_ui->splitter->setStretchFactor(1, 3);
+
     this->loadServerTree();
     this->_ui->serverTree->expandAll();
 
