@@ -3,7 +3,7 @@
 
 #include <QtCore/QDebug>
 
-ConfigEditor::ConfigEditor(ServerTreeItem *item, QWidget *parent) :
+ConfigEditor::ConfigEditor(ServerTreeItem *item, QWidget *parent):
     QWidget(parent),
     _ui(new Ui::ConfigEditor),
     _item(item)

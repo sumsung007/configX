@@ -9,7 +9,7 @@ namespace Ui {
     class ConfigEditor;
 }
 
-class ConfigEditor : public QWidget
+class ConfigEditor: public QWidget
 {
     Q_OBJECT
 
