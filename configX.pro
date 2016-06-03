@@ -32,3 +32,8 @@ FORMS += \
 
 DISTFILES += \
     .gitignore
+
+win32 {
+    INCLUDEPATH += "C:/Program Files (x86)/libssh/include"
+    LIBS += -L"C:/Program Files (x86)/libssh/lib" -lssh
+}
