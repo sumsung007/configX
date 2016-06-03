@@ -16,19 +16,24 @@ SOURCES += \
     src/servertree/servertreewidget.cpp \
     src/servertree/servertreeitem.cpp \
     src/configeditor/configeditor.cpp \
-    src/servertree/serveritemdialog.cpp
+    src/servertree/serveritemdialog.cpp \
+    src/configeditor/modules/nginxwidget.cpp \
+    src/configeditor/modules/basewidget.cpp
 
 HEADERS += \
     src/mainwindow.hpp \
     src/servertree/servertreewidget.hpp \
     src/servertree/servertreeitem.hpp \
     src/configeditor/configeditor.h \
-    src/servertree/serveritemdialog.h
+    src/servertree/serveritemdialog.h \
+    src/configeditor/modules/nginxwidget.h \
+    src/configeditor/modules/basewidget.h
 
 FORMS += \
     src/mainwindow.ui \
     src/configeditor/configeditor.ui \
-    src/servertree/serveritemdialog.ui
+    src/servertree/serveritemdialog.ui \
+    src/configeditor/modules/nginxwidget.ui
 
 DISTFILES += \
     .gitignore
@@ -36,4 +41,9 @@ DISTFILES += \
 win32 {
     INCLUDEPATH += "C:/Program Files (x86)/libssh/include"
     LIBS += -L"C:/Program Files (x86)/libssh/lib" -lssh
+}
+
+unix {
+    INCLUDEPATH += /usr/include/libssh
+    LIBS += -lssh
 }

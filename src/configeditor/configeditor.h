@@ -2,6 +2,7 @@
 #define CONFIGEDITOR_H
 
 #include "../servertree/servertreeitem.hpp"
+#include "modules/basewidget.h"
 
 #include <QtWidgets/QWidget>
 
@@ -17,9 +18,12 @@ public:
     explicit ConfigEditor(ServerTreeItem *item, QWidget *parent = 0);
     ~ConfigEditor();
 
+    ServerTreeItem *item() const;
+
 private:
     Ui::ConfigEditor *_ui;
     ServerTreeItem *_item;
+    BaseWidget *_currentModule;
 };
 
 #endif // CONFIGEDITOR_H

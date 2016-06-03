@@ -1,9 +1,9 @@
+#include "mainwindow.hpp"
+#include "ui_mainwindow.h"
+
 #include "servertree/servertreeitem.hpp"
 #include "servertree/serveritemdialog.h"
 #include "configeditor/configeditor.h"
-
-#include "mainwindow.hpp"
-#include "ui_mainwindow.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
@@ -81,6 +81,20 @@ MainWindow::MainWindow(QWidget *parent) :
         ConfigEditor *configEditor = new ConfigEditor(server);
         this->_ui->configTabWidget->addTab(configEditor, server->text(ServerTreeItem::COLUMN_NAME));
         server->setOpenTab(configEditor);
+    });
+
+    connect(this->_ui->configTabWidget, &QTabWidget::tabCloseRequested, [this](int index) {
+        qDebug() << "Requested tab close" << index;
+
+        ConfigEditor *config = dynamic_cast<ConfigEditor*>(this->_ui->configTabWidget->widget(index));
+        if (!config) {
+            qCritical("Could not convert tab to config");
+            return;
+        }
+
+        config->item()->setOpenTab(Q_NULLPTR);
+        this->_ui->configTabWidget->removeTab(index);
+        delete config;
     });
 }
 
