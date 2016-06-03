@@ -108,6 +108,15 @@ bool MainWindow::saveServerTree()
     QJsonDocument doc;
     doc.setObject(config);
 
+    QFileInfo configFileInfo(this->_getConfigPath());
+    QDir configDirectory(configFileInfo.absolutePath());
+    if (!configDirectory.exists()) {
+        if (!configDirectory.mkpath(configFileInfo.absolutePath())) {
+            qCritical("Could not create config directory %s", configFileInfo.absolutePath().toUtf8().constData());
+            return false;
+        }
+    }
+
     QFile configFile(this->_getConfigPath());
     if (!configFile.open(QIODevice::WriteOnly)) {
         qCritical("Could not open config file %s in write only mode", this->_getConfigPath().toUtf8().constData());
