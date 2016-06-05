@@ -12,9 +12,15 @@ ConfigEditor::ConfigEditor(ServerTreeItem *item, QWidget *parent):
 {
     qDebug() << "Create ConfigEditor instance";
 
-    this->_sshSession = new SshSession(item->host(), item->port(), item->username(), item->keyPath(), item->keyPassphrase());
+    // Connect ssh session
+    this->_sshSession = new SshSession(item->host(), item->port(), item->username(), item->keyPath(), item->keyPassphrase(), this);
 
+    // Setup UI
     this->_ui->setupUi(this);
+    if (this->_sshSession->isConnected()) {
+        this->_ui->statusLabel->setText("Online");
+        this->_ui->uptimeLabel->setText(this->_sshSession->uptime().toString("yyyy/MM/dd hh:mm:ss"));
+    }
 
     this->_ui->moduleWidget->addWidget(new NginxWidget(this, this));
 
@@ -35,7 +41,6 @@ ConfigEditor::ConfigEditor(ServerTreeItem *item, QWidget *parent):
 
 ConfigEditor::~ConfigEditor()
 {
-    delete this->_sshSession;
     delete this->_ui;
 
     qDebug() << "Destroy ConfigEditor instance";
