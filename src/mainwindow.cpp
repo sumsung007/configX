@@ -2,8 +2,8 @@
 #include "ui_mainwindow.h"
 
 #include "servertree/servertreeitem.hpp"
-#include "servertree/serveritemdialog.h"
-#include "configeditor/configeditor.h"
+#include "servertree/serveritemdialog.hpp"
+#include "configeditor/configeditor.hpp"
 
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
@@ -79,6 +79,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
         // Create new tab
         ConfigEditor *configEditor = new ConfigEditor(server);
+        if (!configEditor->sshSession()->isConnected()) {
+            delete configEditor;
+            return;
+        }
+
         this->_ui->configTabWidget->addTab(configEditor, server->text(ServerTreeItem::COLUMN_NAME));
         server->setOpenTab(configEditor);
     });

@@ -1,13 +1,11 @@
-#include "sshsession.h"
+#include "sshsession.hpp"
 
 #include <fcntl.h>
 
 #include <QtCore/QDebug>
 
-SshSession::SshSession(QString host, int port, QString username, QString keyPath, QString keyPassphrase, QObject *parent):
-    QObject(parent),
-    _host(host),
-    _port(port),
+SshSession::SshSession(QString host, int port, QString username, QString keyPath, QString keyPassphrase):
+    NetworkSession(host, port),
     _username(username),
     _keyPath(keyPath),
     _keyPassphrase(keyPassphrase)
@@ -20,13 +18,13 @@ SshSession::SshSession(QString host, int port, QString username, QString keyPath
 
     this->_sftpSession = NULL;
 
-    uint connectionPort = (uint) this->_port;
+    uint connectionPort = (uint) this->port;
     long timeout = 10;
     bool useSsh1 = false;
     bool useSsh2 = true;
     int logVerbosity = SSH_LOG_INFO;
 
-    ssh_options_set(this->_sshSession, SSH_OPTIONS_HOST, this->_host.toUtf8().constData());
+    ssh_options_set(this->_sshSession, SSH_OPTIONS_HOST, this->host.toUtf8().constData());
     ssh_options_set(this->_sshSession, SSH_OPTIONS_PORT, &connectionPort);
     ssh_options_set(this->_sshSession, SSH_OPTIONS_USER, this->_username.toUtf8().constData());
     ssh_options_set(this->_sshSession, SSH_OPTIONS_IDENTITY, this->_keyPath.toUtf8().constData());
@@ -81,8 +79,8 @@ bool SshSession::readFileContents(const QString path, QString *content)
     char buffer[16384];
     int nbytes;
     int rc;
-    QString tempContent;
 
+    *content = "";
     access_type = O_RDONLY;
 
     // Open file read only
@@ -97,7 +95,6 @@ bool SshSession::readFileContents(const QString path, QString *content)
         nbytes = sftp_read(file, buffer, sizeof(buffer));
 
         if (nbytes == 0) {
-            tempContent.append(buffer);
             break; // EOF
         } else if (nbytes < 0) {
             qCritical("Error while reading file %s: %d", path.toUtf8().constData(), sftp_get_error(this->_sftpSession));
@@ -107,10 +104,8 @@ bool SshSession::readFileContents(const QString path, QString *content)
             return false;
         }
 
-        tempContent.append(buffer);
+        content->append(buffer);
     }
-
-    *content = tempContent;
 
     // Close file
     rc = sftp_close(file);
@@ -207,6 +202,7 @@ void SshSession::closeChannel(ssh_channel channel)
 void SshSession::updateTime()
 {
     QString uptime;
+
     // Read uptime
     if (!this->executeCommand("uptime", &uptime)) {
         qCritical("Could not get uptime from server!");
@@ -215,7 +211,7 @@ void SshSession::updateTime()
 
     qDebug() << "Uptime" << uptime;
 
-    QRegExp regexMinute("(\\d+:\\d+:\\d+)\\s+up\\s+(\\d+\\:\\d+|\\d+).*,\\s+(\\d+)\\s+user[s]?,\\s+load average:\\s+(\\d+\\.\\d+),\\s+(\\d+\\.\\d+),\\s+(\\d+\\.\\d+).*");
+    QRegExp regexMinute("(\\d+:\\d+:\\d+)\\s+up\\s+(\\d+\\:\\d+|\\d+).*,\\s+(\\d+)\\s+user[s]?,\\s+load average:\\s+(\\d+[\\.|,]\\d+),\\s+(\\d+[\\.|,]\\d+),\\s+(\\d+[\\.|,]\\d+).*");
     QRegExp regexDay("(\\d+:\\d+:\\d+)\\s+up\\s+(\\d+|\\d+:\\d+)\\s+days?,\\s+(\\d+ min|\\d+:\\d+)?,\\s+(\\d+)\\s+user[s]?,\\s+load average:\\s+(\\d+\\.\\d+),\\s+(\\d+\\.\\d+),\\s+(\\d+\\.\\d+).*");
 
     if (regexDay.indexIn(uptime) > -1) {
@@ -233,8 +229,9 @@ void SshSession::updateTime()
         qDebug() << "Running" << running;
         if (running.contains(":")) {
             int hours = running.left(running.indexOf(":")).toInt();
-            int minutes = running.right(running.indexOf(":")).toInt();
+            int minutes = running.right(2).toInt();
             qDebug() << "Hours/minutes/days" << hours << minutes << days;
+
             this->_uptime = this->_uptime.addSecs((-1) * ((days * 24 * 60 * 60) + (hours * 60 * 60) + (minutes * 60)));
         } else {
             this->_uptime = this->_uptime.addSecs((-1) * (running.toInt() * 60));
@@ -252,8 +249,9 @@ void SshSession::updateTime()
         qDebug() << "Running" << running;
         if (running.contains(":")) {
             int hours = running.left(running.indexOf(":")).toInt();
-            int minutes = running.right(running.indexOf(":")).toInt();
+            int minutes = running.right(2).toInt();
             qDebug() << "Hours/minutes" << hours << minutes;
+
             this->_uptime = this->_uptime.addSecs((-1) * ((hours * 60 * 60) + (minutes * 60)));
         } else {
             this->_uptime = this->_uptime.addSecs((-1) * (running.toInt() * 60));

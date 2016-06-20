@@ -2,7 +2,7 @@
 #define CONFIGEDITOR_H
 
 #include "../servertree/servertreeitem.hpp"
-#include "sshsession.h"
+#include "sshsession.hpp"
 
 #include <QtWidgets/QWidget>
 
@@ -15,15 +15,11 @@ class ConfigEditor: public QWidget
     Q_OBJECT
 
 public:
-    explicit ConfigEditor(ServerTreeItem *item, QWidget *parent = 0);
+    explicit ConfigEditor(ServerTreeItem *item = 0, QWidget *parent = 0);
     ~ConfigEditor();
 
     ServerTreeItem *item() const;
-
-    bool isSshConnected();
-
-protected:
-    bool connectSsh();
+    SshSession *sshSession();
 
 private:
     Ui::ConfigEditor *_ui;

@@ -1,7 +1,7 @@
-#include "configeditor.h"
+#include "configeditor.hpp"
 #include "ui_configeditor.h"
 
-#include "modules/nginxwidget.h"
+#include "modules/nginxwidget/nginxwidget.hpp"
 
 #include <QtCore/QDebug>
 
@@ -13,7 +13,7 @@ ConfigEditor::ConfigEditor(ServerTreeItem *item, QWidget *parent):
     qDebug() << "Create ConfigEditor instance";
 
     // Connect ssh session
-    this->_sshSession = new SshSession(item->host(), item->port(), item->username(), item->keyPath(), item->keyPassphrase(), this);
+    this->_sshSession = new SshSession(item->host(), item->port(), item->username(), item->keyPath(), item->keyPassphrase());
 
     // Setup UI
     this->_ui->setupUi(this);
@@ -22,7 +22,7 @@ ConfigEditor::ConfigEditor(ServerTreeItem *item, QWidget *parent):
         this->_ui->uptimeLabel->setText(this->_sshSession->uptime().toString("yyyy/MM/dd hh:mm:ss"));
     }
 
-    this->_ui->moduleWidget->addWidget(new NginxWidget(this, this));
+    this->_ui->moduleWidget->addWidget(new NginxWidget(this->sshSession(), this));
 
     connect(this->_ui->nginxButton, &QToolButton::clicked, [this]() {
         this->_ui->nginxButton->setChecked(true);
@@ -44,6 +44,11 @@ ConfigEditor::~ConfigEditor()
     delete this->_ui;
 
     qDebug() << "Destroy ConfigEditor instance";
+}
+
+SshSession *ConfigEditor::sshSession()
+{
+    return this->_sshSession;
 }
 
 ServerTreeItem *ConfigEditor::item() const

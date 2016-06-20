@@ -1,4 +1,4 @@
-#include "basewidget.h"
+#include "basewidget.hpp"
 
 BaseWidget::BaseWidget(ConfigEditor *editor, QWidget *parent):
     QWidget(parent),

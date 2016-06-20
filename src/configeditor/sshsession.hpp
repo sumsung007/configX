@@ -1,18 +1,18 @@
 #ifndef SSHSESSION_H
 #define SSHSESSION_H
 
+#include "networksession.hpp"
+
 #include <QtCore/QObject>
 #include <QtCore/QDateTime>
 
 #include <libssh/libssh.h>
 #include <libssh/sftp.h>
 
-class SshSession: public QObject
+class SshSession: public NetworkSession
 {
-    Q_OBJECT
-
 public:
-    explicit SshSession(QString host, int port, QString username, QString keyPath, QString keyPassphrase, QObject *parent = 0);
+    SshSession(QString host, int port, QString username, QString keyPath, QString keyPassphrase);
     ~SshSession();
 
     bool readFileContents(const QString path, QString *content);
@@ -28,8 +28,6 @@ protected:
     void updateTime();
 
 private:
-    QString _host;
-    int _port;
     QString _username;
     QString _keyPath;
     QString _keyPassphrase;

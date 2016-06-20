@@ -1,4 +1,4 @@
-#include "serveritemdialog.h"
+#include "serveritemdialog.hpp"
 #include "ui_serveritemdialog.h"
 
 #include <QtCore/QDebug>

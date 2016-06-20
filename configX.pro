@@ -1,44 +1,42 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2016-06-02T16:11:19
-#
-#-------------------------------------------------
-
 QT += core gui widgets
 
 TARGET = configX
 TEMPLATE = app
 CONFIG += c++11
 
+SRC_PREFIX = src
+include(files.pri)
+
 SOURCES += \
-    src/main.cpp \
-    src/mainwindow.cpp \
-    src/servertree/servertreewidget.cpp \
-    src/servertree/servertreeitem.cpp \
-    src/configeditor/configeditor.cpp \
-    src/servertree/serveritemdialog.cpp \
-    src/configeditor/modules/nginxwidget.cpp \
-    src/configeditor/modules/basewidget.cpp \
-    src/configeditor/sshsession.cpp
+    $${SRC_PREFIX}/main.cpp \
+    $${SRC_PREFIX}/mainwindow.cpp \
+    $${SRC_PREFIX}/servertree/serveritemdialog.cpp \
+    $${SRC_PREFIX}/servertree/servertreewidget.cpp \
+    $${SRC_PREFIX}/servertree/servertreeitem.cpp \
+    $${SRC_PREFIX}/configeditor/configeditor.cpp \
+    $${SRC_PREFIX}/configeditor/sshsession.cpp \
+    $${SRC_PREFIX}/configeditor/modules/basewidget.cpp \
+    $${SRC_PREFIX}/configeditor/modules/nginxwidget/nginxwidget.cpp
 
 HEADERS += \
-    src/mainwindow.hpp \
-    src/servertree/servertreewidget.hpp \
-    src/servertree/servertreeitem.hpp \
-    src/configeditor/configeditor.h \
-    src/servertree/serveritemdialog.h \
-    src/configeditor/modules/nginxwidget.h \
-    src/configeditor/modules/basewidget.h \
-    src/configeditor/sshsession.h
+    $${SRC_PREFIX}/mainwindow.hpp \
+    $${SRC_PREFIX}/servertree/serveritemdialog.hpp \
+    $${SRC_PREFIX}/servertree/servertreewidget.hpp \
+    $${SRC_PREFIX}/servertree/servertreeitem.hpp \
+    $${SRC_PREFIX}/configeditor/configeditor.hpp \
+    $${SRC_PREFIX}/configeditor/sshsession.hpp \
+    $${SRC_PREFIX}/configeditor/modules/basewidget.hpp \
+    $${SRC_PREFIX}/configeditor/modules/nginxwidget/nginxwidget.hpp
 
 FORMS += \
-    src/mainwindow.ui \
-    src/configeditor/configeditor.ui \
-    src/servertree/serveritemdialog.ui \
-    src/configeditor/modules/nginxwidget.ui
+    $${SRC_PREFIX}/mainwindow.ui \
+    $${SRC_PREFIX}/configeditor/configeditor.ui \
+    $${SRC_PREFIX}/servertree/serveritemdialog.ui \
+    $${SRC_PREFIX}/configeditor/modules/nginxwidget/nginxwidget.ui
 
 DISTFILES += \
-    .gitignore
+    .gitignore \
+    files.pri
 
 win32 {
     INCLUDEPATH += "C:/Program Files (x86)/libssh/include"
